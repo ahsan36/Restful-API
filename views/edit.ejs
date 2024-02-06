@@ -10,11 +10,13 @@
     <h1>Edit your Post</h1>
     <p>Post id: <%= post.id %> username</p>
     <p>Post username: <%= post.id %> </p>
-
-    <form>
-        <textarea rows="10" cols="35"><%= post.content %></textarea>
+    
+    <!-- override with POST having ?_method=PATCH -->
+    
+    <form method="POST" action="/posts/<%=post.id%>?_method=PATCH">
+        <textarea rows="10" cols="35" name="content"><%= post.content %></textarea>
         <br><br>
-        <button>Submit Post</button>
+        <button>Submit</button>
     </form>
     
 </body>

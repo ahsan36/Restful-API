@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 
 const path = require("path");
+const methodOverride = require('method-override')
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -11,6 +12,7 @@ const port = 8080;
 //  when we not define this then req.body gave the undefined
 
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 // Serving static files
 
@@ -66,11 +68,11 @@ app.get("/posts/:id", (req, res) => {
 
 // Updating the individual post
 app.patch("/posts/:id", (req, res) => {
-    // let { id } = req.params;
+    let { id } = req.params;
     let newContent = req.body.content;
     let post = posts.find((p) => id === p.id);
     post.content = newContent;
-    res.render("show.ejs", {post});
+    res.redirect("/posts");
 });
 
 // For editing the individual post
@@ -78,6 +80,13 @@ app.get("/posts/:id/edit", (req, res) => {
     let { id } = req.params;
     let post = posts.find((p) => id === p.id);
     res.render("edit.ejs", {post});
+});
+
+// For deleting the individual post
+app.delete("/posts/:id", (req, res) => {
+    let { id } = req.params;
+    posts = posts.filter((p) => id !== p.id);
+    res.redirect("/posts");
 });
 
 app.listen(port, () => {
